@@ -25,8 +25,7 @@ int set_fd_polling(int queue, int fd, int action, long milliseconds)
     struct epoll_event chevent;
     chevent.data.fd = fd;
     chevent.events = EPOLLOUT | EPOLLIN |
-                     EPOLLET | EPOLLERR |
-                     EPOLLRDHUP | EPOLLHUP;
+                     EPOLLET | EPOLLRDHUP;
     if (milliseconds) {
         struct itimerspec newtime;
         newtime.it_value.tv_sec = newtime.it_interval.tv_sec =
@@ -161,9 +160,12 @@ void reactor_stop(struct Reactor *reactor)
 int reactor_review(struct Reactor *reactor)
 {
     if (!PRIV(reactor)->reactor_fd) return -1;
+    
+    /* set the last tick with ms */
 
-    /* set the last tick */
-    time(&reactor->last_tick);
+    struct timeval  tv;
+    gettimeofday(&tv, NULL);
+    reactor->last_tick = (tv.tv_sec) * 1000 + (tv.tv_usec)/1000 ;
 
     /* wait for events and handle them */
     int active_count = _WAIT_FOR_EVENTS_;

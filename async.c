@@ -90,13 +90,20 @@ static int async_run(async_p async, void (*task)(void *), void *arg)
             return -1;
         }
     }
+
+    /*c = malloc(sizeof(*c));
+        if (!c) {
+            pthread_mutex_unlock(&async->lock);
+            return -1;
+        }*/
+
     c->next = NULL;
     c->task = task;
     c->arg = arg;
     if (async->tasks) {
         *(async->pos) = c;
     } else {
-        async->tasks = c;
+        async->tasks = c; 
     }
     async->pos = &(c->next);
     pthread_mutex_unlock(&async->lock);
@@ -143,7 +150,7 @@ static void *worker_thread_cycle(void *_async)
     char sig_buf;
 
     /* pause for signal for as long as we're active. */
-    while (async->run && (read(async->pipe.in, &sig_buf, 1) >= 0)) {
+    while (async->run && (read(async->pipe.in, &sig_buf, 1) > 0)) {
         perform_tasks(async);
         sched_yield();
     }
