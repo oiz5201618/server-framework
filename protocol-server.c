@@ -1359,7 +1359,7 @@ static int bind_server_socket(struct Server *self)
     memset(&hints, 0, sizeof hints);
     hints.ai_family = AF_UNSPEC;  /* don't care IPv4 or IPv6 */
     hints.ai_socktype = SOCK_STREAM;  /* TCP stream sockets */
-    hints.ai_flags = AI_PASSIVE;
+    hints.ai_flags = AI_PASSIVE;  /* usually used by server socket*/
 
     if (getaddrinfo(self->settings->address, self->settings->port,
                     &hints, &servinfo)) {
