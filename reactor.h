@@ -52,7 +52,7 @@ struct Reactor {
     /* global data and settings */
 
     /** the time (seconds since epoch) of the last "tick" (event cycle) */
-    long long last_tick;
+    int last_tick;
 
     /**
      * the maximum value for a file descriptor that the reactor will

@@ -100,7 +100,7 @@ struct Server {
     size_t group_task_pool_size;
     void **buffer_map;
     long capacity; /**< socket capacity */
-    time_t last_to; /**< the last timeout review */
+    int last_to; /**< the last timeout review */
     int srvfd; /**< the server socket */
     pid_t root_pid; /**< the original process pid */
     volatile char run; /**< the flag that tells the server to stop */
